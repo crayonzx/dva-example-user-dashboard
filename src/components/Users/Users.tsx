@@ -1,8 +1,8 @@
-import React from 'react';
+import * as React from 'react';
 import { connect } from 'dva';
 import { Table, Pagination, Popconfirm, Button } from 'antd';
 import { routerRedux } from 'dva/router';
-import styles from './Users.css';
+import * as styles from './Users.css';
 import { PAGE_SIZE } from '../../constants';
 import UserModal from './UserModal';
 

@@ -1,5 +1,5 @@
-import React from 'react';
-import styles from './MainLayout.css';
+import * as React from 'react';
+import * as styles from './MainLayout.css';
 import Header from './Header';
 
 function MainLayout({ children, location }) {

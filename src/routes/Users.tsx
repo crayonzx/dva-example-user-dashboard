@@ -1,6 +1,6 @@
-import React from 'react';
+import * as React from 'react';
 import { connect } from 'dva';
-import styles from './Users.css';
+import * as styles from './Users.css';
 import UsersComponent from '../components/Users/Users';
 import MainLayout from '../components/MainLayout/MainLayout';
 

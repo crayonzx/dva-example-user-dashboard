@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
+import * as React from 'react';
 import { Modal, Form, Input } from 'antd';
 
 const FormItem = Form.Item;
 
-class UserEditModal extends Component {
+class UserEditModal extends React.Component {
 
   constructor(props) {
     super(props);
