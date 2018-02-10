@@ -6,7 +6,8 @@
     "build:dll": "roadhog buildDll",
     "test": "roadhog test",
     "lint": "eslint --ext .js src test",
-    "precommit": "npm run lint"
+    "precommit": "npm run lint",
+    "tcm": "tcm src -c"
   },
   "dependencies": {
     "antd": "^3.2.0",
@@ -24,6 +25,7 @@
     "eslint-config-airbnb": "^16.1.0",
     "redbox-react": "^1.5.0",
     "roadhog": "^2.2.0",
+    "typed-css-modules": "^0.3.1",
     "typescript": "^2.7.1"
   }
 }
