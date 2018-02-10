@@ -12,20 +12,20 @@ class UserEditModal extends Component {
     };
   }
 
-  showModelHandler(e) {
+  showModelHandler = (e) => {
     if (e) e.stopPropagation();
     this.setState({
       visible: true,
     });
-  }
+  };
 
-  hideModelHandler() {
+  hideModelHandler = () => {
     this.setState({
       visible: false,
     });
-  }
+  };
 
-  okHandler() {
+  okHandler = () => {
     const { onOk } = this.props;
     this.props.form.validateFields((err, values) => {
       if (!err) {
