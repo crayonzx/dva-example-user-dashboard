@@ -22,7 +22,8 @@ app.use(createLoading());
 // Moved to router.js
 
 // 4. Router
-app.router(require('./router').default);
+import RouterConfig from './router';
+app.router(RouterConfig);
 
 // 5. Start
 app.start('#root');

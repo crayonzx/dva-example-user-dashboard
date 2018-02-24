@@ -1,18 +1,38 @@
 import * as React from 'react';
 import { Modal, Form, Input } from 'antd';
+import { FormComponentProps } from 'antd/lib/form';
 
 const FormItem = Form.Item;
 
-class UserEditModal extends React.Component {
+export interface UserValues {
+  name: string,
+  email: string,
+  website: string,
+}
 
-  constructor(props) {
+export interface UserRecord extends UserValues {
+  id: string,
+}
+
+export interface UserEditModalProps extends FormComponentProps {
+  record: UserRecord,
+  onOk: (values: UserValues) => void,
+}
+
+interface UserEditModalState {
+  visible: boolean,
+}
+
+class UserEditModal extends React.Component<UserEditModalProps, UserEditModalState> {
+
+  constructor(props: UserEditModalProps) {
     super(props);
     this.state = {
       visible: false,
     };
   }
 
-  showModelHandler = (e) => {
+  showModelHandler = (e: React.MouseEvent<any>) => {
     if (e) e.stopPropagation();
     this.setState({
       visible: true,
@@ -27,7 +47,7 @@ class UserEditModal extends React.Component {
 
   okHandler = () => {
     const { onOk } = this.props;
-    this.props.form.validateFields((err, values) => {
+    this.props.form.validateFields((err, values: UserValues) => {
       if (!err) {
         onOk(values);
         this.hideModelHandler();
@@ -47,7 +67,7 @@ class UserEditModal extends React.Component {
     return (
       <span>
         <span onClick={this.showModelHandler}>
-          { children }
+          {children}
         </span>
         <Modal
           title="Edit User"
@@ -55,7 +75,7 @@ class UserEditModal extends React.Component {
           onOk={this.okHandler}
           onCancel={this.hideModelHandler}
         >
-          <Form horizontal="true" onSubmit={this.okHandler}>
+          <Form layout="horizontal" onSubmit={this.okHandler}>
             <FormItem
               {...formItemLayout}
               label="Name"

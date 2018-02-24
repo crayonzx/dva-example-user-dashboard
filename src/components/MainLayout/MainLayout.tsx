@@ -1,8 +1,14 @@
 import * as React from 'react';
+import { Location } from 'history';
 import * as styles from './MainLayout.css';
 import Header from './Header';
 
-function MainLayout({ children, location }) {
+interface MainLayoutProps {
+  children?: React.ReactNode,
+  location: Location,
+}
+
+const MainLayout: React.SFC<MainLayoutProps> = ({ children, location }) => {
   return (
     <div className={styles.normal}>
       <Header location={location} />

@@ -1,46 +1,57 @@
 import * as React from 'react';
 import { connect } from 'dva';
+import { DispatchProp } from 'react-redux';
 import { Table, Pagination, Popconfirm, Button } from 'antd';
+import { TableProps, ColumnProps } from 'antd/lib/table';
 import { routerRedux } from 'dva/router';
 import * as styles from './Users.css';
 import { PAGE_SIZE } from '../../constants';
-import UserModal from './UserModal';
+import UserModal, { UserRecord, UserValues } from './UserModal';
+import { AppState } from '../../models/users';
 
-function Users({ dispatch, list: dataSource, loading, total, page: current }) {
-  function deleteHandler(id) {
-    dispatch({
+interface UsersProps extends TableProps<UserRecord>, DispatchProp<any> {
+  list: UserRecord[],
+  total: number,
+  page: number,
+}
+
+class UserRecordTable extends Table<UserRecord> {}
+
+const Users: React.SFC<UsersProps> = ({ dispatch, list: dataSource, loading, total, page: current }) => {
+  function deleteHandler(id: string) {
+    dispatch!({
       type: 'users/remove',
       payload: id,
     });
   }
 
-  function pageChangeHandler(page) {
-    dispatch(routerRedux.push({
+  function pageChangeHandler(page: number) {
+    dispatch!(routerRedux.push({
       pathname: '/users',
       query: { page },
     }));
   }
 
-  function editHandler(id, values) {
-    dispatch({
+  function editHandler(id: string, values: UserValues) {
+    dispatch!({
       type: 'users/patch',
       payload: { id, values },
     });
   }
 
-  function createHandler(values) {
-    dispatch({
+  function createHandler(values: UserValues) {
+    dispatch!({
       type: 'users/create',
       payload: values,
     });
   }
 
-  const columns = [
+  const columns: ColumnProps<UserRecord>[] = [
     {
       title: 'Name',
       dataIndex: 'name',
       key: 'name',
-      render: text => <a href="">{text}</a>,
+      render: (text: string) => <a href="">{text}</a>,
     },
     {
       title: 'Email',
@@ -55,7 +66,7 @@ function Users({ dispatch, list: dataSource, loading, total, page: current }) {
     {
       title: 'Operation',
       key: 'operation',
-      render: (text, record) => (
+      render: (text: string, record: UserRecord) => (
         <span className={styles.operation}>
           <UserModal record={record} onOk={editHandler.bind(null, record.id)}>
             <a>Edit</a>
@@ -72,15 +83,15 @@ function Users({ dispatch, list: dataSource, loading, total, page: current }) {
     <div className={styles.normal}>
       <div>
         <div className={styles.create}>
-          <UserModal record={{}} onOk={createHandler}>
+          <UserModal record={{} as UserRecord} onOk={createHandler}>
             <Button type="primary">Create User</Button>
           </UserModal>
         </div>
-        <Table
+        <UserRecordTable
           columns={columns}
           dataSource={dataSource}
           loading={loading}
-          rowKey={record => record.id}
+          rowKey={(record: UserRecord, index: number) => record.id}
           pagination={false}
         />
         <Pagination
@@ -95,7 +106,8 @@ function Users({ dispatch, list: dataSource, loading, total, page: current }) {
   );
 }
 
-function mapStateToProps(state) {
+function mapStateToProps(state: AppState): UsersProps {
+  window.console.log(state);
   const { list, total, page } = state.users;
   return {
     loading: state.loading.models.users,

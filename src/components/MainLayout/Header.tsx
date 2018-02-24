@@ -1,8 +1,13 @@
 import * as React from 'react';
 import { Menu, Icon } from 'antd';
 import { Link } from 'dva/router';
+import { Location } from 'history';
 
-function Header({ location }) {
+interface HeaderProps {
+  location: Location,
+}
+
+const Header: React.SFC<HeaderProps> = ({ location }) => {
   return (
     <Menu
       selectedKeys={[location.pathname]}

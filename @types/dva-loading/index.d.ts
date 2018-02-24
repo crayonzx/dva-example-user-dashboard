@@ -5,3 +5,9 @@ declare function createLoading(opts?: { [x: string]: any; }): {
 };
 
 export default createLoading;
+
+export interface LoadingState {
+    global: boolean,
+    effects: { [x: string]: boolean },
+    models: { [x: string]: boolean },
+}
