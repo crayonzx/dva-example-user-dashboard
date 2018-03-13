@@ -58,8 +58,8 @@ const UsersModel: Model = {
     },
   },
   effects: {
-    *fetch({ payload: { page = 1 } }: FetchAction, { call, put }) {
-      window.console.log(page, typeof page);
+    *fetch({ payload }: FetchAction, { call, put }) {
+      const page = payload ? (payload.page || 1) : 1;
       const { data, headers } = yield call(usersService.fetch, { page });
       yield put({
         type: 'save',
@@ -89,9 +89,9 @@ const UsersModel: Model = {
   },
   subscriptions: {
     setup({ dispatch, history }) {
-      return history.listen(({ pathname, query }) => {
+      return history.listen(({ pathname, state }) => {
         if (pathname === '/users') {
-          dispatch({ type: 'fetch', payload: query });
+          dispatch({ type: 'fetch', payload: state || { page: 1} });
         }
       });
     },

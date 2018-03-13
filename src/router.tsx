@@ -1,40 +1,42 @@
 import * as React from 'react';
-import { DvaInstance, RouterAPI, Model } from 'dva';
-import { Router, RouteConfig } from 'dva/router';
-import UsersModel from './models/users';
+import { RouterAPI } from 'dva';
+import dynamic from "dva/dynamic";
+import { routerRedux, Route, Switch } from "dva/router";
+import { LocaleProvider, Spin } from "antd";
+import zhCN from "antd/lib/locale-provider/zh_CN";
 
-const cached = {};
-function registerModel(app: DvaInstance, model: Model) {
-  if (!cached[model.namespace]) {
-    app.model(model);
-    cached[model.namespace] = 1;
-  }
-}
+import IndexPage from "./routes/IndexPage";
+import Users from "./routes/Users";
+
+const { ConnectedRouter } = routerRedux;
+
+dynamic.setDefaultLoadingComponent(() => {
+  return <Spin size="large" style={{ width: "100%", margin: "40px 0 !important" }} />;
+});
 
 function RouterConfig({ history, app }: RouterAPI) {
-  const routes: RouteConfig = [
-    {
-      path: '/',
-      name: 'IndexPage',
-      getComponent(nextState, cb) {
-        require.ensure([], (require) => {
-          cb(null, require('./routes/IndexPage').default);
-        });
-      },
-    },
-    {
-      path: '/users',
-      name: 'UsersPage',
-      getComponent(nextState, cb) {
-        require.ensure([], (require) => {
-          registerModel(app, UsersModel);
-          cb(null, require('./routes/Users').default);
-        });
-      },
-    },
-  ];
-
-  return <Router history={history} routes={routes} />;
+  return (
+    <LocaleProvider locale={zhCN}>
+      <ConnectedRouter history={history}>
+        <Switch>
+          <Route path="/" exact
+            // component={IndexPage}
+            render={(props: any) => {
+              const IndexPage = require("./routes/IndexPage").default;
+              return <IndexPage {...props} />;
+            }}
+          />
+          <Route path="/users"
+            // component={Users}
+            render={(props: any) => {
+              const Users = require("./routes/Users").default;
+              return <Users {...props} />;
+            }}
+          />
+        </Switch>
+      </ConnectedRouter>
+    </LocaleProvider>
+  );
 }
 
 export default RouterConfig;

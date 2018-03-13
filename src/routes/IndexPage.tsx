@@ -23,7 +23,5 @@ const IndexPage : React.SFC<IndexPageProps> = ({ location }) => {
   );
 }
 
-IndexPage.propTypes = {
-};
-
-export default connect(null, {})(IndexPage);
+export default connect()(IndexPage);
+// export default IndexPage;

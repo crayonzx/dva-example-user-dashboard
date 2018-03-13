@@ -28,7 +28,7 @@ const Users: React.SFC<UsersProps> = ({ dispatch, list: dataSource, loading, tot
   function pageChangeHandler(page: number) {
     dispatch!(routerRedux.push({
       pathname: '/users',
-      query: { page },
+      state: { page },
     }));
   }
 
@@ -107,7 +107,6 @@ const Users: React.SFC<UsersProps> = ({ dispatch, list: dataSource, loading, tot
 }
 
 function mapStateToProps(state: AppState): UsersProps {
-  window.console.log(state);
   const { list, total, page } = state.users;
   return {
     loading: state.loading.models.users,
