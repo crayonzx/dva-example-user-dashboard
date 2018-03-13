@@ -22,10 +22,6 @@
       "./@types",
     ],
     "paths": {
-      "dva": ["./@types/dva/index.d.ts"],
-      "dva/dynamic": ["./@types/dva/dynamic.d.ts"],
-      "dva/router": ["./@types/dva/router.d.ts"],
-      "dva-loading": ["./@types/dva-loading"],
       // "fastclick": ["./@types/fastclick"],
     }
   },
