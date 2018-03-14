@@ -22,6 +22,7 @@
       "./@types",
     ],
     "paths": {
+      "mst-react-router": ["./@types/mst-react-router/index.d.ts"],
       // "fastclick": ["./@types/fastclick"],
     }
   },

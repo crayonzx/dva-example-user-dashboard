@@ -1,5 +1,5 @@
 {
-  "entry": "src/index.tsx",
+  "entry": "./src/index.tsx",
   "disableCSSModules": false,
   "publicPath": "/",
   "theme": {
@@ -23,7 +23,6 @@
   "env": {
     "development": {
       "extraBabelPlugins": [
-        "dva-hmr"
       ]
     }
   }
