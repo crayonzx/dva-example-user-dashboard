@@ -3,10 +3,13 @@ import { Router, Route, Switch } from "react-router";
 import { createBrowserHistory } from "history";
 import { Provider } from "mobx-react";
 import { syncHistoryWithStore } from "mst-react-router";
+import { connectReduxDevtools } from "mst-middlewares";
 import { LocaleProvider } from "antd";
 import zhCN from "antd/lib/locale-provider/zh_CN";
 
 import { store, routerModel, usersModel } from "./models";
+
+connectReduxDevtools(require("remotedev"), store);
 
 const history = syncHistoryWithStore(createBrowserHistory(), routerModel);
 
