@@ -1,33 +1,37 @@
 import * as React from 'react';
+import { observer, inject } from "mobx-react";
 import { Menu, Icon } from 'antd';
-import { Link } from 'dva/router';
-import { Location } from 'history';
+import { Link } from "react-router-dom";
+// import { Location } from 'history';
+import { RouterModelType } from "../../models";
 
 interface HeaderProps {
-  location: Location,
+  router?: RouterModelType,
 }
 
-const Header: React.SFC<HeaderProps> = ({ location }) => {
+const Header = inject('router')(observer(({ router }: HeaderProps) => {
   return (
-    <Menu
-      selectedKeys={[location.pathname]}
-      mode="horizontal"
-      theme="dark"
-    >
+    <Menu selectedKeys={[router!.location.pathname]} mode="horizontal" theme="dark">
       <Menu.Item key="/users">
-        <Link to="/users"><Icon type="bars" />Users</Link>
+        <Link to="/users">
+          <Icon type="bars" />Users
+        </Link>
       </Menu.Item>
       <Menu.Item key="/">
-        <Link to="/"><Icon type="home" />Home</Link>
+        <Link to="/">
+          <Icon type="home" />Home
+        </Link>
       </Menu.Item>
       <Menu.Item key="/404">
-        <Link to="/page-you-dont-know"><Icon type="frown-circle" />404</Link>
+        <Link to="/page-you-dont-know">
+          <Icon type="frown-circle" />404
+        </Link>
       </Menu.Item>
       <Menu.Item key="/antd">
         <a href="https://github.com/dvajs/dva">dva</a>
       </Menu.Item>
     </Menu>
   );
-}
+}));
 
 export default Header;

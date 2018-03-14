@@ -1,40 +1,45 @@
-import * as React from 'react';
-import { RouterAPI } from 'dva';
-import dynamic from "dva/dynamic";
-import { routerRedux, Route, Switch } from "dva/router";
-import { LocaleProvider, Spin } from "antd";
+import * as React from "react";
+import { Router, Route, Switch } from "react-router";
+import { createBrowserHistory } from "history";
+import { Provider } from "mobx-react";
+import { syncHistoryWithStore } from "mst-react-router";
+import { LocaleProvider } from "antd";
 import zhCN from "antd/lib/locale-provider/zh_CN";
 
-import IndexPage from "./routes/IndexPage";
-import Users from "./routes/Users";
+import { store, routerModel, usersModel } from "./models";
 
-const { ConnectedRouter } = routerRedux;
+const history = syncHistoryWithStore(createBrowserHistory(), routerModel);
 
-dynamic.setDefaultLoadingComponent(() => {
-  return <Spin size="large" style={{ width: "100%", margin: "40px 0 !important" }} />;
+history.listen(location => {
+  if (location.pathname === "/users") {
+    usersModel.reload();
+  }
 });
 
-function RouterConfig({ history, app }: RouterAPI) {
+function RouterConfig() {
   return (
     <LocaleProvider locale={zhCN}>
-      <ConnectedRouter history={history}>
-        <Switch>
-          <Route path="/" exact
-            // component={IndexPage}
-            render={(props: any) => {
-              const IndexPage = require("./routes/IndexPage").default;
-              return <IndexPage {...props} />;
-            }}
-          />
-          <Route path="/users"
-            // component={Users}
-            render={(props: any) => {
-              const Users = require("./routes/Users").default;
-              return <Users {...props} />;
-            }}
-          />
-        </Switch>
-      </ConnectedRouter>
+      <Provider store={store} router={routerModel} users={usersModel}>
+        <Router history={history}>
+          <Switch>
+            <Route
+              path="/"
+              exact // component={IndexPage}
+              render={(props: any) => {
+                const IndexPage = require("./routes/IndexPage").default;
+                return <IndexPage {...props} />;
+              }}
+            />
+            <Route
+              path="/users" // component={Users}
+              render={(props: any) => {
+                const Users = require("./routes/Users").default;
+                return <Users {...props} />;
+              }}
+            />
+          </Switch>
+        </Router>
+      </Provider>
     </LocaleProvider>
   );
 }

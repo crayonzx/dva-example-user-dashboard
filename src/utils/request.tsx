@@ -1,5 +1,3 @@
-import * as fetch from 'dva/fetch';
-
 function checkStatus(response: Response): Response {
   if (response.status >= 200 && response.status < 300) {
     return response;

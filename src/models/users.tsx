@@ -1,101 +1,64 @@
-import * as usersService from '../services/users';
-import { Model } from 'dva';
-import { LoadingState } from 'dva-loading';
-import { UserRecord, UserValues } from '../components/Users/UserModal';
+import { types, flow } from "mobx-state-tree";
 
-export interface UsersState {
-  list: UserRecord[],
-  total: number,
-  page: number,
-}
+import * as usersService from "../services/users";
+import { UserRecord, UserValues } from "../components/Users/UserModal";
 
-export interface AppState {
-  loading: LoadingState,
-  users: UsersState,
-}
-
-export enum TypeKeys {
-  FETCH = 'fetch',
-  REMOVE = 'remove',
-  PATCH = 'patch',
-  CREATE = 'create',
-  RELOAD = 'reload',
-}
-
-export interface FetchAction {
-  type: TypeKeys.FETCH,
-  payload: { page: number },
-}
-export interface RemoveAction {
-  type: TypeKeys.REMOVE,
-  payload: string,  // id
-}
-export interface PatchAction {
-  type: TypeKeys.PATCH,
-  payload: { id: string, values: UserValues },
-}
-export interface CreateAction {
-  type: TypeKeys.CREATE,
-  payload: UserValues,  // values
-}
-export interface ReloadAction {
-  type: TypeKeys.RELOAD,
-  // payload: ,
-}
-
-export type ActionTypes = FetchAction | RemoveAction | PatchAction | CreateAction | ReloadAction;
-
-const UsersModel: Model = {
-  namespace: 'users',
-  state: {
-    list: [],
+export const UsersModel = types
+  .model("Users", {
+    _list: types.frozen,
     total: 0,
     page: 0,
-  },
-  reducers: {
-    save(state: UsersState, { payload: { data: list, total, page } }) {
-      return { ...state, list, total, page };
-    },
-  },
-  effects: {
-    *fetch({ payload }: FetchAction, { call, put }) {
-      const page = payload ? (payload.page || 1) : 1;
-      const { data, headers } = yield call(usersService.fetch, { page });
-      yield put({
-        type: 'save',
-        payload: {
-          data,
-          total: parseInt(headers['x-total-count'], 10),
-          page: parseInt(page as any, 10),
-        },
-      });
-    },
-    *remove({ payload: id }: RemoveAction, { call, put }) {
-      yield call(usersService.remove, id);
-      yield put({ type: 'reload' });
-    },
-    *patch({ payload: { id, values } }: PatchAction, { call, put }) {
-      yield call(usersService.patch, id, values);
-      yield put({ type: 'reload' });
-    },
-    *create({ payload: values }: CreateAction, { call, put }) {
-      yield call(usersService.create, values);
-      yield put({ type: 'reload' });
-    },
-    *reload(action: ReloadAction, { put, select }) {
-      const page: number = yield select((state: AppState) => state.users.page);
-      yield put({ type: 'fetch', payload: { page } });
-    },
-  },
-  subscriptions: {
-    setup({ dispatch, history }) {
-      return history.listen(({ pathname, state }) => {
-        if (pathname === '/users') {
-          dispatch({ type: 'fetch', payload: state || { page: 1} });
-        }
-      });
-    },
-  },
-};
+    loading: false
+  }).views(self => ({
+    get usersList(): UserRecord[] {
+      return self._list;
+    }
+  })).actions(self => {
+    function save(data: UserRecord[], total: number, page: number) {
+      self._list = data;
+      self.total = total;
+      self.page = page;
+    }
 
-export default UsersModel;
+    const fetch = flow(function*(page: number) {
+      self.loading = true;
+      if (!page) {
+        page = 1;
+      }
+      const { data, headers } = yield usersService.fetch({ page });
+      save(
+        data,
+        parseInt(headers["x-total-count"], 10),
+        parseInt(page as any, 10)
+      );
+      self.loading = false;
+    });
+
+    const reload = () => fetch(self.page);
+
+    const remove = flow(function*(id: string) {
+      yield usersService.remove(id);
+      yield reload();
+    });
+
+    const patch = flow(function*(id: string, values: UserValues) {
+      yield usersService.patch(id, values);
+      yield reload();
+    });
+
+    const create = flow(function*(values: UserValues) {
+      yield usersService.create(values);
+      yield reload();
+    });
+
+    return { save, fetch, reload, remove, patch, create };
+  });
+
+export const usersModel = UsersModel.create({
+  _list: [],
+  total: 0,
+  page: 0,
+  loading: false
+});
+
+export type UsersModelType = typeof UsersModel.Type;

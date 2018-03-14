@@ -1,16 +1,10 @@
 import * as React from 'react';
-import { connect } from 'dva';
-import { Location } from 'history';
 import * as styles from './IndexPage.css';
 import MainLayout from '../components/MainLayout/MainLayout';
 
-interface IndexPageProps {
-  location: Location,
-}
-
-const IndexPage : React.SFC<IndexPageProps> = ({ location }) => {
+const IndexPage : React.SFC = () => {
   return (
-    <MainLayout location={location}>
+    <MainLayout>
       <div className={styles.normal}>
         <h1 className={styles.title}>Yay! Welcome to dva!</h1>
         <div className={styles.welcome} />
@@ -23,5 +17,4 @@ const IndexPage : React.SFC<IndexPageProps> = ({ location }) => {
   );
 }
 
-export default connect()(IndexPage);
-// export default IndexPage;
+export default IndexPage;
