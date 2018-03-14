@@ -15,11 +15,17 @@ type RouterModelType = {
   block(...args: any[]): void;
 };
 
-export const RouterModel: IModelType<{ location?: any; action?: any }, RouterModelType>;
+export const RouterModel: IModelType<
+  { location?: any; action?: any },
+  RouterModelType
+>;
 
 /**
  * Sync the history object with the given mst router store
  * @param {object} history - 'History' instance to subscribe to
  * @param {object} store - Router store instance to sync with the history changes
  */
-export const syncHistoryWithStore: (history: History, store: RouterModelType) => History;
+export const syncHistoryWithStore: (
+  history: History,
+  store: RouterModelType
+) => History & { unsubscribe: () => void };

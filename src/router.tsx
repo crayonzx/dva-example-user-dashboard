@@ -13,11 +13,11 @@ connectReduxDevtools(require("remotedev"), store);
 
 const history = syncHistoryWithStore(createBrowserHistory(), routerModel);
 
-history.listen(location => {
-  if (location.pathname === "/users") {
-    usersModel.reload();
-  }
-});
+// history.listen(location => {
+//   if (location.pathname === "/users") {
+//     usersModel.reload();
+//   }
+// });
 
 function RouterConfig() {
   return (
