@@ -4,12 +4,14 @@ import { createBrowserHistory } from "history";
 import { Provider } from "mobx-react";
 import { syncHistoryWithStore } from "mst-react-router";
 import { connectReduxDevtools } from "mst-middlewares";
+import makeInspectable from "mobx-devtools-mst";
 import { LocaleProvider } from "antd";
 import zhCN from "antd/lib/locale-provider/zh_CN";
 
 import { store, routerModel, usersModel } from "./models";
 
 connectReduxDevtools(require("remotedev"), store);
+makeInspectable(store);
 
 const history = syncHistoryWithStore(createBrowserHistory(), routerModel);
 
