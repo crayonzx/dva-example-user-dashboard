@@ -1,14 +1,18 @@
 import { types } from "mobx-state-tree";
-import { autorun } from "mobx";
+import { reaction } from "mobx";
 
 import { routerModel, RouterModel } from "./router";
 import { usersModel, UsersModel } from "./users";
 
-autorun(() => {
-  if (routerModel.location.pathname === '/users') {
-    usersModel.reload();
+reaction(
+  () => routerModel.location.pathname,
+  path => {
+    window.console.log(path);
+    if (path === "/users") {
+      usersModel.reload();
+    }
   }
-});
+);
 
 // Define root model type
 const RootModel = types.model({
