@@ -1,31 +1,26 @@
-import { types } from "mobx-state-tree";
-import { reaction } from "mobx";
+import { observable, reaction } from "mobx";
 
-import { routerModel, RouterModel } from "./router";
-import { usersModel, UsersModel } from "./users";
+import RouterStore from "./router";
+import UsersStore from "./users";
 
-reaction(
-  () => routerModel.location.pathname,
-  path => {
-    window.console.log(path);
-    if (path === "/users") {
-      usersModel.reload();
-    }
+class RootStore {
+  @observable routerStore: RouterStore;
+  @observable usersStore: UsersStore;
+
+  constructor() {
+    this.routerStore = new RouterStore();
+    this.usersStore = new UsersStore();
   }
-);
+}
 
-// Define root model type
-const RootModel = types.model({
-  router: RouterModel,
-  users: UsersModel
-});
+export const rootStore = new RootStore();
 
-export const store = RootModel.create({
-  router: routerModel,
-  users: usersModel
-});
-
-export type RootModelType = typeof RootModel.Type;
-
-export * from "./router";
-export * from "./users";
+// reaction(
+//   () => rootStore.routerStore.history!.location.pathname,
+//   path => {
+//     window.console.log(path);
+//     if (path === "/users") {
+//       rootStore.usersStore.reload();
+//     }
+//   }
+// );

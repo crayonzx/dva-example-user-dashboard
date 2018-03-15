@@ -17,12 +17,13 @@
     "strictNullChecks": true,
     "suppressImplicitAnyIndexErrors": true,
     "noUnusedLocals": true,
+    "experimentalDecorators": true,
     "typeRoots": [
       "./node_modules/@types",
       "./@types",
     ],
     "paths": {
-      "mst-react-router": ["./@types/mst-react-router/index.d.ts"],
+      // "mst-react-router": ["./@types/mst-react-router/index.d.ts"],
       // "fastclick": ["./@types/fastclick"],
     }
   },

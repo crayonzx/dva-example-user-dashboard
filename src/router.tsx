@@ -2,29 +2,31 @@ import * as React from "react";
 import { Router, Route, Switch } from "react-router";
 import { createBrowserHistory } from "history";
 import { Provider } from "mobx-react";
-import { syncHistoryWithStore } from "mst-react-router";
-import { connectReduxDevtools } from "mst-middlewares";
-import makeInspectable from "mobx-devtools-mst";
+import { syncHistoryWithStore } from "mobx-react-router";
 import { LocaleProvider } from "antd";
 import zhCN from "antd/lib/locale-provider/zh_CN";
 
-import { store, routerModel, usersModel } from "./models";
+import { rootStore } from "./models";
 
-connectReduxDevtools(require("remotedev"), store);
-makeInspectable(store);
+const history = syncHistoryWithStore(
+  createBrowserHistory(),
+  rootStore.routerStore
+);
 
-const history = syncHistoryWithStore(createBrowserHistory(), routerModel);
-
-// history.listen(location => {
-//   if (location.pathname === "/users") {
-//     usersModel.reload();
-//   }
-// });
+history.subscribe(location => {
+  if (location.pathname === "/users") {
+    rootStore.usersStore.reload();
+  }
+});
 
 function RouterConfig() {
   return (
     <LocaleProvider locale={zhCN}>
-      <Provider store={store} router={routerModel} users={usersModel}>
+      <Provider
+        store={rootStore}
+        router={rootStore.routerStore}
+        users={rootStore.usersStore}
+      >
         <Router history={history}>
           <Switch>
             <Route
