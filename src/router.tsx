@@ -13,11 +13,11 @@ const history = syncHistoryWithStore(
   rootStore.routerStore
 );
 
-history.subscribe(location => {
-  if (location.pathname === "/users") {
-    rootStore.usersStore.reload();
-  }
-});
+// history.subscribe(location => {
+//   if (location.pathname === "/users") {
+//     rootStore.usersStore.reload();
+//   }
+// });
 
 function RouterConfig() {
   return (

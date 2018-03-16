@@ -24,9 +24,19 @@ export default class UsersStore {
     this.page = page;
   }
 
+  @action
+  loadingStart() {
+    this.loading = true;
+  }
+
+  @action
+  loadingFinish() {
+    this.loading = false;
+  }
+
   @asyncAction
   *fetch(page: number) {
-    this.loading = true;
+    this.loadingStart();
     if (!page) {
       page = 1;
     }
@@ -36,7 +46,7 @@ export default class UsersStore {
       parseInt(headers["x-total-count"], 10),
       parseInt(page as any, 10)
     );
-    this.loading = false;
+    this.loadingFinish();
   }
 
   @asyncAction

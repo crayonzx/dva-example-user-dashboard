@@ -4,12 +4,12 @@ import { Table, Pagination, Popconfirm, Button } from "antd";
 import { TableProps, ColumnProps } from "antd/lib/table";
 
 import UserModal, { UserRecord, UserValues } from "./UserModal";
-import { UsersModelType } from "../../models";
+import { UsersStore } from "../../models";
 import { PAGE_SIZE } from "../../constants";
 import * as styles from "./Users.css";
 
 interface UsersProps extends TableProps<UserRecord> {
-  users?: UsersModelType;
+  users?: UsersStore;
 }
 
 class UserRecordTable extends Table<UserRecord> {}
@@ -32,7 +32,9 @@ class Users extends React.Component<UsersProps> {
   };
 
   render() {
-    const { usersList: dataSource, total, page: current, loading } = this.props.users!;
+    const { usersList, total, page: current, loading } = this.props.users!;
+    const dataSource = usersList.slice();
+
     const columns: ColumnProps<UserRecord>[] = [
       {
         title: "Name",
@@ -100,4 +102,4 @@ class Users extends React.Component<UsersProps> {
   }
 }
 
-export default inject('users')(observer(Users));
+export default inject("users")(observer(Users));

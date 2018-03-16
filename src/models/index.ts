@@ -1,26 +1,32 @@
-import { observable, reaction } from "mobx";
+import { observable, reaction, useStrict } from "mobx";
+import { Location } from "history";
 
 import RouterStore from "./router";
 import UsersStore from "./users";
 
+useStrict(true);
+
 class RootStore {
   @observable routerStore: RouterStore;
   @observable usersStore: UsersStore;
-
-  constructor() {
-    this.routerStore = new RouterStore();
-    this.usersStore = new UsersStore();
-  }
 }
 
+export const routerStore = new RouterStore();
+export const usersStore = new UsersStore();
 export const rootStore = new RootStore();
 
-// reaction(
-//   () => rootStore.routerStore.history!.location.pathname,
-//   path => {
-//     window.console.log(path);
-//     if (path === "/users") {
-//       rootStore.usersStore.reload();
-//     }
-//   }
-// );
+export { RootStore, RouterStore, UsersStore };
+
+rootStore.routerStore = routerStore;
+rootStore.usersStore = usersStore;
+routerStore.location = {} as Location;
+
+reaction(
+  () => routerStore.location!.pathname,
+  path => {
+    window.console.log(path);
+    if (path === "/users") {
+      usersStore.reload();
+    }
+  }
+);
