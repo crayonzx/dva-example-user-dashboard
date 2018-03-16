@@ -1,36 +1,38 @@
 import { observable, computed, action } from "mobx";
 import { asyncAction } from "mobx-utils";
-import remotedev from "mobx-remotedev";
+// import remotedev from ; // tslint:disable-line
 
 import * as usersService from "../services/users";
 import { UserRecord, UserValues } from "../components/Users/UserModal";
 
+const remotedev = require("mobx-remotedev");
+
 @remotedev
-export default class UsersStore {
-  @observable.shallow _list: UserRecord[] = [];
+class UsersStore {
+  @observable.shallow private _list: UserRecord[] = [];
   @observable total: number = 0;
   @observable page: number = 0;
   @observable loading: boolean = false;
 
   @computed
   get usersList(): UserRecord[] {
-    return this._list;
+    return this._list.slice();
   }
 
   @action
-  save(data: UserRecord[], total: number, page: number) {
+  private save(data: UserRecord[], total: number, page: number) {
     this._list = data;
     this.total = total;
     this.page = page;
   }
 
   @action
-  loadingStart() {
+  private loadingStart() {
     this.loading = true;
   }
 
   @action
-  loadingFinish() {
+  private loadingFinish() {
     this.loading = false;
   }
 
@@ -72,3 +74,5 @@ export default class UsersStore {
     yield this.reload();
   }
 }
+
+export default UsersStore;

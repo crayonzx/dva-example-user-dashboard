@@ -32,8 +32,12 @@ class Users extends React.Component<UsersProps> {
   };
 
   render() {
-    const { usersList, total, page: current, loading } = this.props.users!;
-    const dataSource = usersList.slice();
+    const {
+      usersList: dataSource,
+      total,
+      page: current,
+      loading
+    } = this.props.users!;
 
     const columns: ColumnProps<UserRecord>[] = [
       {
