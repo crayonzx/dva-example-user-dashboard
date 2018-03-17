@@ -18,17 +18,12 @@
     "suppressImplicitAnyIndexErrors": true,
     "noUnusedLocals": true,
     "experimentalDecorators": true,
-    "typeRoots": [
-      "./node_modules/@types",
-      "./@types",
-    ],
+    "typeRoots": ["./node_modules/@types", "./@types"],
     "paths": {
+      "@src/*": ["./src/*"]
       // "mst-react-router": ["./@types/mst-react-router/index.d.ts"],
       // "fastclick": ["./@types/fastclick"],
     }
   },
-  "exclude": [
-    "node_modules",
-    "build",
-  ]
+  "exclude": ["node_modules", "build"]
 }

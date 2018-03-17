@@ -1,0 +1,16 @@
+{
+    "recommendations": [
+        // "dbaeumer.vscode-eslint",
+        // "ionutvmi.path-autocomplete",
+        // "mhmadhamster.postcss-language",
+        // "eg2.tslint",
+        // "woota.vscode-intl",
+        // "jpoissonnier.vscode-styled-components",
+        // "wayou.vscode-todo-highlight",
+        "esbenp.prettier-vscode",
+        "EditorConfig.editorconfig",
+        // "naumovs.color-highlight",
+        // "formulahendry.auto-rename-tag",
+        // "formulahendry.auto-close-tag"
+    ]
+}

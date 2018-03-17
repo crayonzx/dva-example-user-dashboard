@@ -1,12 +1,12 @@
-import * as React from "react";
-import { observer, inject } from "mobx-react";
-import { Table, Pagination, Popconfirm, Button } from "antd";
-import { TableProps, ColumnProps } from "antd/lib/table";
+import * as React from 'react';
+import { observer, inject } from 'mobx-react';
+import { Table, Pagination, Popconfirm, Button } from 'antd';
+import { TableProps, ColumnProps } from 'antd/lib/table';
 
-import UserModal, { UserRecord, UserValues } from "./UserModal";
-import { UsersStore } from "../../models";
-import { PAGE_SIZE } from "../../constants";
-import * as styles from "./Users.css";
+import { UsersStore } from '@src/models';
+import { PAGE_SIZE } from '@src/constants';
+import UserModal, { UserRecord, UserValues } from './UserModal';
+import * as styles from './Users.css';
 
 interface UsersProps extends TableProps<UserRecord> {
   users?: UsersStore;
@@ -32,39 +32,31 @@ class Users extends React.Component<UsersProps> {
   };
 
   render() {
-    const {
-      usersList: dataSource,
-      total,
-      page: current,
-      loading
-    } = this.props.users!;
+    const { usersList: dataSource, total, page: current, loading } = this.props.users!;
 
     const columns: ColumnProps<UserRecord>[] = [
       {
-        title: "Name",
-        dataIndex: "name",
-        key: "name",
-        render: (text: string) => <a href="">{text}</a>
+        title: 'Name',
+        dataIndex: 'name',
+        key: 'name',
+        render: (text: string) => <a href="">{text}</a>,
       },
       {
-        title: "Email",
-        dataIndex: "email",
-        key: "email"
+        title: 'Email',
+        dataIndex: 'email',
+        key: 'email',
       },
       {
-        title: "Website",
-        dataIndex: "website",
-        key: "website"
+        title: 'Website',
+        dataIndex: 'website',
+        key: 'website',
       },
       {
-        title: "Operation",
-        key: "operation",
+        title: 'Operation',
+        key: 'operation',
         render: (text: string, record: UserRecord) => (
           <span className={styles.operation}>
-            <UserModal
-              record={record}
-              onOk={this.editHandler.bind(null, record.id)}
-            >
+            <UserModal record={record} onOk={this.editHandler.bind(null, record.id)}>
               <a>Edit</a>
             </UserModal>
             <Popconfirm
@@ -74,8 +66,8 @@ class Users extends React.Component<UsersProps> {
               <a href="">Delete</a>
             </Popconfirm>
           </span>
-        )
-      }
+        ),
+      },
     ];
 
     return (
@@ -106,4 +98,4 @@ class Users extends React.Component<UsersProps> {
   }
 }
 
-export default inject("users")(observer(Users));
+export default inject('users')(observer(Users));
